@@ -10,10 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/pascal-brand38/react-components-helper.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Pascal Brand",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/pascal-brand38/react-components-helper/issues"
   },
-  "homepage": "https://github.com/pascal-brand38/react-components-helper#readme"
+  "homepage": "https://github.com/pascal-brand38/react-components-helper#readme",
+  "dependencies": {
+    "react-icons": "^4.7.1"
+  }
 }
