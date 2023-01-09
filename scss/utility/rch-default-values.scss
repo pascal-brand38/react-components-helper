@@ -1,0 +1,19 @@
+/// Copyright (c) Pascal Brand
+/// MIT License
+///
+
+:root {
+  --rch-root-font-size: 16px;
+
+  // colors - do not use html color code (such as FloralWhite) as not recognized by the theme setter
+  --rch-body-color: #ffffff;
+  --rch-body-bg-color: #2b3452;
+  --rch-color-1: #bc4123;
+
+  //
+  --rch-margin-xl: 2rem;
+  --rch-margin-l:  1.5rem;
+  --rch-margin-m:  1rem;
+  --rch-margin-s:  .75rem;
+  --rch-margin-xs: .5rem;
+}
