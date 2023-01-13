@@ -1,14 +1,13 @@
 {
   "name": "react-components-helper",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "suppose this npm package name is 'my-lib'",
+  "private": true,
+  "version": "0.0.3",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pascal-brand38/react-components-helper.git"
+    "dev": "SHOW_ALL_COMPONENT_DEMOS=true vite serve docs",
+    "build-docs": "rimraf docs/dist && vite build docs && serve -s docs/dist",
+    "ssr-docs": "rimraf docs/dist && vite-pages ssr docs && serve docs/dist",
+    "build-lib": "vite build"
   },
   "author": "Pascal Brand",
   "license": "MIT",
@@ -17,6 +16,21 @@
   },
   "homepage": "https://github.com/pascal-brand38/react-components-helper#readme",
   "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.5.0",
     "react-icons": "^4.7.1"
+  },
+  "devDependencies": {
+    "@mdx-js/react": "^2.2.1",
+    "@rollup/plugin-typescript": "^10.0.1",
+    "@types/node": "^18.11.16",
+    "@types/react": "^18.0.26",
+    "@vitejs/plugin-react": "^3.0.0",
+    "rimraf": "^3.0.2",
+    "serve": "^14.1.2",
+    "vite": "^4.0.1",
+    "vite-pages-theme-doc": "^4.0.0",
+    "vite-plugin-react-pages": "^4.0.0"
   }
 }
