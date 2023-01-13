@@ -23,4 +23,24 @@ and in node_modules
 
     npm install --save-dev sass
 
-And add in 
+And add in package.json
+
+    "sass": {
+      "includePaths": [
+        "./node_modules"
+      ]
+    },
+
+# Using from a TS project
+In case it is used from a TS project (and in case this component is still a JS one), then follow https://pjausovec.medium.com/how-to-fix-error-ts7016-could-not-find-a-declaration-file-for-module-xyz-has-an-any-type-ecab588800a8:
+
+Create a file src/typings/index.d.ts, with content:
+
+    declare module 'react-components-helper/components/RchGeoCoords';
+
+and then add in tsconfig.json:
+
+    "typeRoots": [
+      "./src/typings",
+      "./node_modules/@types/"
+    ]
