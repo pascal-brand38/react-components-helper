@@ -44,6 +44,13 @@ and then add in tsconfig.json:
       "./src/typings",
       "./node_modules/@types/"
     ]
+
+# Creating a react TS lib
+Cf. https://vitejs.github.io/vite-plugin-react-pages
+
+    npm init vite-pages react-components-helper -- --template lib
+
+
 # vite-pages library starter
 
 This is a demo project for [vite-plugin-react-pages](https://github.com/vitejs/vite-plugin-react-pages).

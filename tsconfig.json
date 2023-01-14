@@ -6,7 +6,7 @@
     "moduleResolution": "Node",
     "lib": ["ES2015"],
     "paths": {
-      "my-lib": ["./src"]
+      "react-component-helper": ["./src"]
     },
     "esModuleInterop": true
   }

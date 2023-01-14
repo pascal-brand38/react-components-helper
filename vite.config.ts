@@ -11,9 +11,9 @@ export default defineConfig({
     // https://vitejs.dev/guide/build.html#library-mode
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'MyLib',
+      name: 'ReactComponentHelper',
       // the proper extensions will be added
-      fileName: 'my-lib',
+      fileName: 'react-component-helper',
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
