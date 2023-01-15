@@ -4,13 +4,13 @@
 /// Dropdown search bar to get town coordinates from town name
 /// Here is a typical usage:
 /*
-  const coords = RchGeoCoords({
-    defaultTownName: 'Bordeaux',            // name of the initial town we look for
-    newCoordsCallback: (townInfo) => {      // callback to get information on the new selected town
+  <RchGeoCoords
+    defaultTownName= 'Bordeaux',            // name of the initial town we look for
+    newCoordsCallback= (townInfo) => {      // callback to get information on the new selected town
       console.log(`Town name: ${townInfo.name}, longitude: ${townInfo.longitude}, latitude: ${townInfo.latitude}`); 
     },
-    countryFilter: ['FR']                   // filter list (2-characters country). If null, town in worldwide
-  })
+    countryFilter= ['FR']                   // filter list (2-characters country). If null, town in worldwide
+  />
 */
 
 
@@ -60,30 +60,19 @@ function RchGeoCoords( { defaultTownName, newCoordsCallback, countryFilter=null 
     }
   }, [townInfo])
 
-  function getCoords() {
-    return townInfo;
-  }
-
-  function render() {
-    if (townInfo) {
-      return (
-        <RchDropdown
-          type='searchbar'
-          initialValue={ displayName(townInfo) }
-          list={townCandidates}
-          onChange={ updateTownCandidates}
-          onSelect={ ({item}) => setTownInfo(item) }
-          valueFromItem={displayName}
-          />
-      )
-    } else {
-      return null;
-    }
-  }
-  
-  return {
-    getCoords,
-    render,
+  if (townInfo) {
+    return (
+      <RchDropdown
+        type='searchbar'
+        initialValue={ displayName(townInfo) }
+        list={townCandidates}
+        onChange={ updateTownCandidates}
+        onSelect={ ({item}) => setTownInfo(item) }
+        valueFromItem={displayName}
+        />
+    )
+  } else {
+    return null;
   }
 }
 export default RchGeoCoords;

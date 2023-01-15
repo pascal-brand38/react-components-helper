@@ -4,6 +4,11 @@ To be installed in your component with
 
     npm install git+https://github.com/pascal-brand38/react-components-helper.git
 
+or in case a specific branch is required:
+
+    npm install git+https://github.com/pascal-brand38/react-components-helper.git#branch_name
+
+
 Then, to refresh it with latest version, use (note the mandatory options --force and --no-save, otherwise the github reference is lost when reinstalling):
 
     npm install react-components-helper --force --no-save
