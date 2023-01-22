@@ -49,3 +49,57 @@ and then add in tsconfig.json:
       "./src/typings",
       "./node_modules/@types/"
     ]
+
+# Gihub pages
+Check https://github.com/gitname/react-gh-pages:
+
+## Setup github pages
+go https://github.com/pascal-brand38/<your_git_repo_name>/settings/pages and:
+    Source: Deploy from a branch
+    Branch:
+    Branch: gh-pages
+    Folder: / (root)
+
+
+    npm install gh-pages --save-dev
+
+* in package.json:
+  * add a homepage property in this format: /<your_git_repo_name>/
+  * add scripts:
+    * "predeploy": "npm run build",
+    * "deploy": "gh-pages -d dist",   as dist is the result of the build
+* in vite.config.js:
+    base: '/<your_git_repo_name>/',   // https://dev.to/shashannkbawa/deploying-vite-app-to-github-pages-3ane
+* run npm run deploy
+
+then the github page becomes
+
+    https://pascal-brand38.github.io/<your_git_repo_name>
+
+
+
+# Work in progress
+
+not working as it is...
+
+## sitemap.xml generation
+
+Check docs at https://github.com/kuflash/react-router-sitemap
+and https://github.com/kuflash/react-router-sitemap/blob/master/api.md
+
+Check tutorial at https://www.amitsn.com/blog/how-to-generate-a-sitemap-for-your-react-website-with-dynamic-content
+
+    npm install --save-dev react-router-sitemap --force
+    npm install --save-dev babel-cli
+    npm install --save-dev babel-preset-es2015
+    npm install --save-dev babel-preset-react
+    npm install --save-dev babel-register
+
+    mkdir -p utils
+    cat > utils/sitemap-builder.js << EOF
+      import { sitemapBuilder as buildSitemap } from 'react-router-sitemap';
+      const paths = ['/'];
+      const hostname = 'https://pascal-brand38.github.io/archives-environnement';
+      const sitemap = buildSitemap(hostname, paths);
+      sitemap.save('./sitemap.xml')
+

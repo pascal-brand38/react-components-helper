@@ -23,7 +23,7 @@
     border-radius: 50%;
     border: 5px solid transparent;
     mix-blend-mode: overlay;
-    animation: rotate var(--duration) var(--timing) infinite;
+    animation: rotate-animation var(--duration) var(--timing) infinite;
     pointer-events: none;
   }
 
@@ -40,7 +40,13 @@
   }
 }
 
-@keyframes rotate {
+.rch-loading-rotate {
+  --duration: 2s;
+  --timing: linear;
+  animation: rotate-animation var(--duration) var(--timing) infinite;
+}
+
+@keyframes rotate-animation {
   0% {
     transform: rotate(0);
   }
