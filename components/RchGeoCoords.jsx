@@ -6,6 +6,7 @@
 /*
   <RchGeoCoords
     defaultTownName= 'Bordeaux',            // name of the initial town we look for
+    defaultDisplay= 'Bordeaux - Gironde',   // display name of the initial town we look for
     newCoordsCallback= (townInfo) => {      // callback to get information on the new selected town
       console.log(`Town name: ${townInfo.name}, longitude: ${townInfo.longitude}, latitude: ${townInfo.latitude}`); 
     },
@@ -38,8 +39,7 @@ function displayName(info) {
   return info.name + ' - ' + info.admin2;
 }
 
-function RchGeoCoords( { defaultTownName, newCoordsCallback, countryFilter=null }) {
-  const [ townInfo, setTownInfo ] = useState(null);
+function RchGeoCoords( { defaultTownName, defaultDisplay, newCoordsCallback, countryFilter=null }) {
   const [ townCandidates, setTownCandidates ] = useState(null);
 
   function updateTownCandidates(townStartsWith) {
@@ -47,32 +47,24 @@ function RchGeoCoords( { defaultTownName, newCoordsCallback, countryFilter=null 
       .then((candidates) => setTownCandidates(candidates));
   }
 
+  function newTownSelection(candidate) {
+    newCoordsCallback(candidate);
+  }
+
   useEffect(() => {
-    if (!townInfo) {
       getGeoCoordsCandidates(defaultTownName, countryFilter)
-        .then((dataTown) => setTownInfo(dataTown[0]));
-    }
-  })
+        .then((dataTown) => newTownSelection(dataTown[0]));
+  }, [])
 
-  useEffect(() => {
-    if (newCoordsCallback && townInfo) {
-      newCoordsCallback(townInfo);
-    }
-  }, [townInfo])
-
-  if (townInfo) {
     return (
       <RchDropdown
         type='searchbar'
-        initialValue={ displayName(townInfo) }
+        initialValue={defaultDisplay}
         list={townCandidates}
         onChange={ updateTownCandidates}
-        onSelect={ ({item}) => setTownInfo(item) }
+        onSelect={ ({item}) => newTownSelection(item) }
         valueFromItem={displayName}
         />
     )
-  } else {
-    return null;
-  }
 }
 export default RchGeoCoords;
