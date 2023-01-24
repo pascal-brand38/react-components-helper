@@ -14,6 +14,15 @@ import './RchDropdown.scss'
 import { SlMagnifier } from "react-icons/sl";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
 
+function Icon({type}) {
+  return (
+    <>
+      {(type === 'dropdown') && (open ? <AiFillCaretUp /> : <AiFillCaretDown />)}
+      {(type === 'searchbar') && <SlMagnifier />}
+    </>
+  )
+}
+
 const RchDropdown = (
   {
     type,               // type of dropdown: dropdown, or searchbar
@@ -22,11 +31,12 @@ const RchDropdown = (
     valueFromItem,      // how the item is printed
     onChange,
     onSelect,           // (index, item) function, called when an item is selected from the dropdown
+    maxNbInCol=-1       // max number elements in a colum
   }
 ) => {
   // whether or not a list is shown below the button
   const [open, setOpen] = useState(false);
-  const toggleOpen = () => { setOpen(!open); };
+  const toggleOpen = () => setOpen(!open)
 
   // value shown in in the button
   const [value, setValue] = useState(initialValue);
@@ -38,20 +48,32 @@ const RchDropdown = (
     onSelect({ index: index, item: item });  // call the external callback for action with this selection
   }
 
-  const Icon = () => {
-    return (
-      <>
-        {(type === 'dropdown') && (open ? <AiFillCaretUp /> : <AiFillCaretDown />)}
-        {(type === 'searchbar') && <SlMagnifier />}
-      </>
-    )
+  function onKeyUp({key}) {
+    if (key === "Enter") {
+      if (list && open && type==='searchbar') {
+        selectItem({ index: 0, item: list[0] })
+      }
+    } else if (key === "Escape") {
+      setOpen(false)
+    }
+  }
+
+  let styleColumns = {}
+  if (list && maxNbInCol!==-1) {
+    const value = Math.floor(list.length / maxNbInCol) + 1
+    styleColumns = { columns: value.toString() }
   }
 
   return (
     <div className="rch-dropdown">
       <div className="rch-dropdown__top">
         {(type === 'dropdown') &&
-          <button className="rch-dropdown__top-toclick" onClick={toggleOpen}> {value} </button>}
+          <button className="rch-dropdown__top-toclick" 
+            onClick={toggleOpen} 
+            onKeyUp={onKeyUp} 
+          >
+              {value} 
+          </button>}
 
         {(type === 'searchbar') &&
           <input
@@ -59,18 +81,17 @@ const RchDropdown = (
             type="text"
             value={value}
             onChange={(e) => { setOpen(true); setValue(e.target.value); onChange(e.target.value); }}
-            onKeyUp={({key}) => {
-              if ((key === "Enter") && list && open) {
-                selectItem({ index: 0, item: list[0] })
-              }}}
+            onFocus={(e) => { setOpen(true); setValue(e.target.value); onChange(e.target.value); }}
+            onKeyUp={onKeyUp}
+            //onBlur={closeOpen}    // react version of onfocusout
           />
         }
 
-        <Icon />
+        <Icon type={type}/>
       </div>
 
       {(list && open) ? (
-        <ul className="rch-dropdown__list">
+        <ul className="rch-dropdown__list" style={styleColumns}>
           {list.map((item, index) => (
             <li key={index} className="rch-dropdown__list-item">
               <button className="rch-dropdown__list-item" onClick={() => selectItem({ index: index, item: item })}>
