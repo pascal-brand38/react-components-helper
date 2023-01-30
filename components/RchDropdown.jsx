@@ -18,10 +18,11 @@ const RchDropdown = (
     list,               // list of items to be shown in the dropdown when opened, or in the searchbar when guessing
     valueFromItem,      // how the item is printed
     onChange,
-    onSelect,           // (index, item) function, called when an item is selected from the dropdown
+    onSelect,           // ({ index, item }) function, called when an item is selected from the dropdown
     maxNbInCol=-1       // max number elements in a colum
   }
 ) => {
+
   // whether or not a list is shown below the button
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen(!isOpen)
@@ -114,7 +115,7 @@ export default RchDropdown;
 RchDropdown.propTypes = {
   type: PropTypes.string.isRequired,
   initialValue: PropTypes.string.isRequired,
-  list: PropTypes.arrayOf(PropTypes.string),
+  list: PropTypes.array,
   valueFromItem: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onSelect: PropTypes.func.isRequired,
