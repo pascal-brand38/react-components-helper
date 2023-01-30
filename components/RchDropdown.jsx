@@ -5,6 +5,7 @@
 /// TODO: keyboard arrow to select in the dropdown list
 ///
 
+import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from "react";
 import './RchDropdown.scss'
 import { RchIcons } from "./RchIcons";
@@ -27,8 +28,6 @@ const RchDropdown = (
   const updateIsOpen = (newState) => { if (isOpen != newState) { setIsOpen(newState); }}
   const dropdownRef = useRef(null)
 
-  console.log("render isOpen: ", isOpen)
-
   // value shown in in the button
   const [value, setValue] = useState(initialValue);
 
@@ -49,21 +48,20 @@ const RchDropdown = (
     }
   }
 
+  function handleClick(e) {
+    // check if we click outside this dropdown button
+    // in this case, we close it
+    for (let parent = e.target.parentNode; parent !== null; parent = parent.parentNode) {
+      if (parent === dropdownRef.current) {
+        return;   // do not close as the clicked div is a child of this dropdown button
+      }
+    }
+    setIsOpen(false)
+  }
+
   useEffect(() => {
     if (isOpen) {
-      function handleClick(e) {
-        // check if we click outside this dropdown button
-        // in this case, we close it
-        for (let parent = e.target.parentNode; parent !== null; parent = parent.parentNode) {
-          if (parent === dropdownRef.current) {
-            return;   // do not close as the clicked div is a child of this dropdown button
-          }
-        }
-        setIsOpen(false)
-      }
-
       addEventListener('click', handleClick);
-
       return () => window.removeEventListener("click", handleClick);    // remove this event listener when isOpen is modified
                                                                         // so when it is closed, there is no event handler
     }
@@ -112,3 +110,13 @@ const RchDropdown = (
 }
 
 export default RchDropdown;
+
+RchDropdown.propTypes = {
+  type: PropTypes.string.isRequired,
+  initialValue: PropTypes.string.isRequired,
+  list: PropTypes.arrayOf(PropTypes.string),
+  valueFromItem: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  onSelect: PropTypes.func.isRequired,
+  maxNbInCol: PropTypes.number
+}

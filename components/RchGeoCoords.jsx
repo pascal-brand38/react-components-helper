@@ -15,7 +15,7 @@
   />
 */
 
-
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react'
 import RchDropdown from './RchDropdown';
 
@@ -54,24 +54,28 @@ function RchGeoCoords( { defaultTownName, defaultDisplay, newCoordsCallback, cou
       .then((candidates) => setTownCandidates(candidates));
   }
 
-  function newTownSelection(candidate) {
-    newCoordsCallback(candidate);
-  }
-
   useEffect(() => {
       getGeoCoordsCandidates(defaultTownName, countryFilter, maxInList)
-        .then((dataTown) => newTownSelection(dataTown[0]));
+        .then((dataTown) => newCoordsCallback(dataTown[0]));
   }, [])
 
-    return (
-      <RchDropdown
-        type='searchbar'
-        initialValue={defaultDisplay}
-        list={townCandidates}
-        onChange={ updateTownCandidates}
-        onSelect={ ({item}) => newTownSelection(item) }
-        valueFromItem={displayName}
-        />
-    )
+  return (
+    <RchDropdown
+      type='searchbar'
+      initialValue={defaultDisplay}
+      list={townCandidates}
+      onChange={ updateTownCandidates}
+      onSelect={ ({item}) => newCoordsCallback(item) }
+      valueFromItem={displayName}
+      />
+  )
 }
 export default RchGeoCoords;
+
+RchGeoCoords.propTypes = {
+  defaultTownName: PropTypes.string.isRequired,
+  defaultDisplay: PropTypes.string.isRequired,
+  newCoordsCallback: PropTypes.func.isRequired,
+  countryFilter: PropTypes.arrayOf(PropTypes.string),
+  maxInList: PropTypes.number,
+};

@@ -36,6 +36,59 @@ And add in package.json
       ]
     },
 
+# Eslint
+
+    npm install eslint eslint-plugin-react eslint-plugin-react-hooks --save-dev
+
+and .eslintrc.json as
+
+    {
+        "env": {
+            "browser": true,
+            "es2021": true
+        },
+        "extends": [
+            "eslint:recommended",
+            "plugin:react/recommended",
+            "plugin:react-hooks/recommended",
+            "plugin:react/jsx-runtime"    
+        ],
+        "overrides": [
+        ],
+        "parserOptions": {
+            "ecmaVersion": "latest",
+            "sourceType": "module",
+            "ecmaFeatures": {
+                "jsx": true
+            }
+        },
+        "plugins": [
+            "react"
+        ],
+        "rules": {
+        }
+    }
+
+and in package.json scripts section:
+
+    "eslint": "node_modules/.bin/eslint src/**/*.jsx"
+
+eslint is then run using npm run eslint
+
+
+If interested in automatically run it during npm run dev of vite, then
+
+    npm install --save-dev vite-plugin-eslint
+
+and in vite.config.js (optional - may be a problem as it is run when npm run dev)
+
+    import eslintPlugin from 'vite-plugin-eslint';
+    export default defineConfig({
+      plugins: [eslintPlugin()],
+    });
+
+
+
 # Using from a TS project
 In case it is used from a TS project (and in case this component is still a JS one), then follow https://pjausovec.medium.com/how-to-fix-error-ts7016-could-not-find-a-declaration-file-for-module-xyz-has-an-any-type-ecab588800a8:
 
@@ -76,6 +129,17 @@ then the github page becomes
 
     https://pascal-brand38.github.io/<your_git_repo_name>
 
+
+# Visual Studio Code plugins / extensions
+
+* console ninja
+
+
+# Ideas
+
+* Satelitte location: https://www.n2yo.com/api/
+* List of public API: https://publicapis.dev/category/weather
+* Test this API for weather: https://www.visualcrossing.com/weather-api
 
 
 # Work in progress
