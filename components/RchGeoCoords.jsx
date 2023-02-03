@@ -19,11 +19,30 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react'
 import RchDropdown from './RchDropdown';
 
+/* used for testing, to delay the fetch
+function waitforme(millisec) {
+  return new Promise(resolve => {
+      setTimeout(() => { resolve('') }, millisec);
+  })
+}
+*/
+
 // https://open-meteo.com/en/docs/geocoding-api
 // get latitude and longitude from town name
+let getGeoCoordsCandidatesLastStartsWith
 async function getGeoCoordsCandidates(townStartsWith, filter, maxInList) {
+  getGeoCoordsCandidatesLastStartsWith = townStartsWith
+  // await waitforme(1000 * (5 - townStartsWith.length))    // used for testing, to delay the fetch
   const get = await fetch("https://geocoding-api.open-meteo.com/v1/search?language=fr&count=100&name=" + townStartsWith);
+  if (getGeoCoordsCandidatesLastStartsWith !== townStartsWith) {    // check for race condition,
+                                                                    // when the previous fetch does not correspond to the last request
+    return Promise.reject(new Error('fail'))
+  }
+  
   const responses = await get.json();
+  if (getGeoCoordsCandidatesLastStartsWith !== townStartsWith) {
+    return Promise.reject(new Error('fail'))
+  }
 
   if (responses && responses.results) {
     let r
@@ -51,12 +70,14 @@ function RchGeoCoords( { defaultTownName, defaultDisplay, newCoordsCallback, cou
 
   function updateTownCandidates(townStartsWith) {
     getGeoCoordsCandidates(townStartsWith, countryFilter, maxInList)
-      .then((candidates) => setTownCandidates(candidates));
+      .then((candidates) => setTownCandidates(candidates))
+      .catch((error) => console.log(error))    // in case of error, do not do anything
   }
 
   useEffect(() => {
       getGeoCoordsCandidates(defaultTownName, countryFilter, maxInList)
-        .then((dataTown) => newCoordsCallback(dataTown[0]));
+        .then((dataTown) => newCoordsCallback(dataTown[0]))
+        .catch((error) => console.log(error))    // in case of error, do not do anything
   }, [])
 
   return (
