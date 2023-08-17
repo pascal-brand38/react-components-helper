@@ -25,27 +25,52 @@ const RchDropdown = (
 
   // whether or not a list is shown below the button
   const [isOpen, setIsOpen] = useState(false);
-  const toggleIsOpen = () => setIsOpen(!isOpen)
+  const toggleIsOpen = () => { setIsOpen(!isOpen); console.log(`toggleIsOpen`);}
   const updateIsOpen = (newState) => { if (isOpen != newState) { setIsOpen(newState); }}
   const dropdownRef = useRef(null)
 
   // value shown in in the button
   const [value, setValue] = useState(initialValue);
 
+  // the item in the list that is hovered thanks to the keyboard
+  const [hovered, setHovered] = useState(-1)
+  const decHovered = () => setHovered((prev) => {
+    if (prev <= 0) {
+      return list.length - 1
+    } else {
+      return (prev - 1)
+    }
+  })
+  const incHovered = () => setHovered((prev) => (prev + 1) % list.length )
+
   // function raised when an item from the list is selected
   const selectItem = ({ index, item }) => {
-    updateIsOpen(false);                      // close the dropdown or the guesses
+    updateIsOpen(false);                         // close the dropdown or the guesses
     setValue(valueFromItem(item));            // set the new value to display in the button
     onSelect({ index: index, item: item });   // call the external callback for action with this selection
   }
 
   function onKeyUp({key}) {
     if (key === "Enter") {
-      if (list && isOpen && type==='searchbar') {
-        selectItem({ index: 0, item: list[0] })
+      console.log(`Enter ${list} ${isOpen}`)
+      if (list && isOpen) {
+        console.log(`list && isOpen`)
+        if (hovered) {
+          selectItem({ index: hovered, item: list[hovered] })
+        } else {
+          selectItem({ index: 0, item: list[0] })
+        }
       }
     } else if (key === "Escape") {
       updateIsOpen(false);
+    } else if (key === "ArrowUp") {
+      if (list && isOpen) {
+        decHovered()
+      }
+    } else if (key === "ArrowDown") {
+      if (list && isOpen) {
+        incHovered()
+      }
     }
   }
 
@@ -62,6 +87,9 @@ const RchDropdown = (
 
   useEffect(() => {
     if (isOpen) {
+      if (hovered !== -1) {
+        setHovered(-1)
+      }
       addEventListener('click', handleClick);
       return () => window.removeEventListener("click", handleClick);    // remove this event listener when isOpen is modified
                                                                         // so when it is closed, there is no event handler
@@ -97,13 +125,22 @@ const RchDropdown = (
 
       {(list && isOpen) ? (
         <ul className="rch-dropdown__list" style={styleColumns}>
-          {list.map((item, index) => (
-            <li key={index} className="rch-dropdown__list-item">
-              <button className="rch-dropdown__list-item" onClick={() => selectItem({ index: index, item: item })}>
-                {valueFromItem(item)}
-              </button>
-            </li>
-          ))}
+          {
+            list.map((item, index) => (
+              index === hovered ?
+              <li key={index} className="rch-dropdown__list-item">
+                <button className="rch-dropdown__list-item rch-dropdown__list-item-hovered" onClick={() => selectItem({ index: index, item: item })}>
+                  {valueFromItem(item)}
+                </button>
+              </li>
+              :
+              <li key={index} className="rch-dropdown__list-item">
+                <button className="rch-dropdown__list-item" onClick={() => selectItem({ index: index, item: item })}>
+                  {valueFromItem(item)}
+                </button>
+              </li>
+            ))
+          }
         </ul>
       ) : null}
     </div>

@@ -135,12 +135,20 @@ then the github page becomes
 * console ninja
 
 
-# Ideas
+# TODOS
+
+## Ideas
 
 * Satelitte location: https://www.n2yo.com/api/
 * List of public API: https://publicapis.dev/category/weather
 * Test this API for weather: https://www.visualcrossing.com/weather-api
+* Tetris
+* Mandelbrot
 
+## Dev
+
+* mobx
+* form to send email to contact
 
 # Work in progress
 
